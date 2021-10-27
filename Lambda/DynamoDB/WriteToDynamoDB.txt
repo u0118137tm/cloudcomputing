@@ -1,0 +1,36 @@
+import json
+import boto3
+
+dynamodb = boto3.resource('dynamodb', endpoint_url="https://dynamodb.eu-west-1.amazonaws.com")
+
+def lambda_handler(event, context):
+    try:
+        table = dynamodb.Table('cloudcomputingdynamodb')
+        Id = event["queryStringParameters"]["id"]
+        City = event["queryStringParameters"]["city"]
+        Temperature = event["queryStringParameters"]["temp"]
+        Humidity = event["queryStringParameters"]["hum"]
+    except:
+        response = "Error processing data"
+        return {
+            'statusCode': 200,
+            'body': response
+        }
+    try:
+        response = table.put_item(
+            Item={
+                'id': Id,
+                'city': City,
+                'info': {
+                    'temperature': Temperature,
+                    'humidity': Humidity
+                }
+            }
+        )
+        response = "Writen to database"
+    except:
+        response = "error writing to db"
+    return {
+        'statusCode': 200,
+        'body': response
+    }
