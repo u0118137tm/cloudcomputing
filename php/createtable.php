@@ -1,9 +1,36 @@
 <?php
 
-include("connect.php");
+$conn = new mysqli('servername', 'username', 'password');
 
+if ($conn->connect_errno) {
 
+    echo "Sorry, this website is experiencing problems.";
 
+    
+    echo "Error: Failed to make a MySQL connection, here is why: \n";
+    echo "Errno: " . $conn->connect_errno . "\n";
+    echo "Error: " . $conn->connect_error . "\n";
+
+    exit;
+}
+else{
+	echo "Connection successful";
+}
+
+//Creating database
+
+$sql = "CREATE DATABASE CloudComputing;";
+
+if ($conn->query($sql) === TRUE) {
+	echo "De query werd succesvol uitgevoerd";
+} 
+else {
+	echo "Error: " . $sql . "<br>" . $conn->error;
+}
+
+$conn->select_db("CloudComputing");
+
+//creating table
 	
 $sql = "CREATE TABLE professions (
     id int NOT NULL AUTO_INCREMENT,
